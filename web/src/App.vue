@@ -1,7 +1,7 @@
 <template>
 	<v-app>
 		<v-app-bar app color="primary" dark>
-			<v-toolbar-title class="headline pointer mr-3 hidden-sm-and-down">
+			<v-toolbar-title class="headline pointer mr-3">
 				<router-link
 					:to="{ path: '/', query: { rootId: $route.query.rootId } }"
 					tag="span"
@@ -35,9 +35,9 @@
 			<v-toolbar-items>
 				<v-btn
 					text
-					class="text-none hidden-sm-and-down"
+					class="text-none"
 					tag="a"
-					href="https://github.com/maple3142/GDIndex"
+					href="https://github.com/omssp/GDIndex"
 					target="_blank"
 				>
 					<v-icon>mdi-github-circle</v-icon>&nbsp;GitHub</v-btn
