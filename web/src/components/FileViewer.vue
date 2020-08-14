@@ -143,14 +143,12 @@ export default {
 				{
 					text: this.$t('modifiedTime'),
 					value: 'modifiedTime',
-					filterable: false,
-					class: 'hidden-sm-and-down'
+					filterable: false
 				},
 				{
 					text: this.$t('fileSize'),
 					value: 'fileSize',
-					filterable: false,
-					class: 'hidden-sm-and-down'
+					filterable: false
 				}
 			],
 			renderStart: null,
