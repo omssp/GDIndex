@@ -128,7 +128,7 @@
 
             let thename = $('#thefname').val() + ' ' + $('#thelname').val()
             let theemail = $('#theemail').val()
-            if(!thename || !theemail) {
+            if (!thename || !theemail) {
                 $('#thesubmit').removeAttr('disabled').html('Subscribe');
                 return;
             }
@@ -136,12 +136,12 @@
                 method: "GET",
                 url: "https://epaper.omssp.workers.dev/?request=addnewemail&email=" + encodeURIComponent(theemail) + "&name=" + encodeURIComponent(thename),
                 async: true,
-                success: function(response) {
+                success: function (response) {
                     console.log(response)
                     $('#themsg').removeClass('d-none btn-danger').addClass('btn-success').html('Subscribed!!')
                     $('#thesubmit').addClass('d-none')
                 },
-                error: function(e) {
+                error: function (e) {
                     console.log(e)
                     $('#themsg').removeClass('d-none btn-success').addClass('btn-danger').html(e.responseText);
                     setTimeout(() => {
