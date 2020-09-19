@@ -230,9 +230,15 @@
             if (location.href.split('#')[1] && location.href.split('#')[1].indexOf('unsub') !== -1) {
                 if (location.href.split('#')[1].split('=')[1])
                     $('#theunemail').val(decodeURIComponent(location.href.split('#')[1].split('=')[1]))
-                gotoUnsub()
+                gotoUnsub();
+                $('a[href="#unsub"]').fadeOut('fast')
+            } else {
+                $('#subdiv').show()
+                $('#unsubdiv').hide()
+                $('a[href="#unsub"]').fadeIn('slow')
             }
         }
+        $(window).on('hashchange', checkURLforextras)
     </script>
     <a href="#unsub" onclick="gotoUnsub(); this.style.display = 'none';" class="danger v-btn v-btn--contained v-size--default" style="position: absolute; bottom: 0.5em; color: wheat; background: #F44336; left: 0; right: 0; margin: auto; max-width: 15em;">Unubscribe</a>
 </body>
