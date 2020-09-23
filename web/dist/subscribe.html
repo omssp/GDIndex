@@ -209,6 +209,7 @@
         function gotoUnsub() {
             $('#subdiv').fadeOut('fast', () => {
                 $('#unsubdiv').fadeIn('fast')
+                $('#app > div > main > div > div > div.row.justify-center > div > div:nth-child(3)').fadeOut('fast')
             })
         }
 
@@ -221,6 +222,7 @@
             } else {
                 $('#subdiv').show()
                 $('#unsubdiv').hide()
+                $('#app > div > main > div > div > div.row.justify-center > div > div:nth-child(3)').fadeIn('fast')
                 $('a[href="#unsub"]').fadeIn('slow')
             }
         }
