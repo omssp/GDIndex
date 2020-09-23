@@ -165,8 +165,10 @@
                     console.log(response)
                     $('#themsg').removeClass('d-none btn-danger').addClass('btn-success').html('Subscribed!!<br>You\'ll receive the ePaper daily on your email<br><br>Please do Check Your <big><u>SPAM</u></big> Folder too...')
                     $('#thesubmit').addClass('d-none')
-                    $('html, body').animate({ scrollTop: ($('#tutor').offset().top - 74) })
-					$('#tutor img')[0].src = $('#tutor img')[0].src
+					window.setTimeout(() => {
+						$('html, body').animate({ scrollTop: ($('#tutor').offset().top - 74) })
+						$('#tutor img')[0].src = $('#tutor img')[0].src
+					}, 3000)
                 },
                 error: function(e) {
                     console.log(e)
