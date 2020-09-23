@@ -115,7 +115,7 @@
                                     </form>
                                 </div>
                                 <div style="width: 100%; height: 100%; text-align: center;" id="tutor">
-                                    <img src="/report_not_spam.gif" alt="report_not_spam" style="max-width: 100%; max-height: min(auto, 90vh);"></div>
+                                    <img src="/report_not_spam.gif" alt="report_not_spam" style="max-width: 100%; max-height: min(auto, 85vh);"></div>
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,8 @@
                     console.log(response)
                     $('#themsg').removeClass('d-none btn-danger').addClass('btn-success').html('Subscribed!!<br>You\'ll receive the ePaper daily on your email<br><br>Please do Check Your <big><u>SPAM</u></big> Folder too...')
                     $('#thesubmit').addClass('d-none')
-                    $('html, body').animate({ scrollTop: $('#tutor').offset().top
+                    $('html, body').animate({ scrollTop: ($('#tutor').offset().top - 74) })
+					$('#tutor img')[0].src = $('#tutor img')[0].src
                 },
                 error: function(e) {
                     console.log(e)
