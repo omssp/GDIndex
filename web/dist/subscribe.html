@@ -79,12 +79,6 @@
                                                 <select class="form-control" id="theedition">
                                                     <option value="" selected disabled>Select Your ePaper Edition
                                                     </option>
-                                                    <option value="">All</option>
-                                                    <option value="the-indian-express">The Indian Express - All Editions
-                                                    </option>
-                                                    <option value="deshonnati">Deshonnati - Nagpur & Yevatmal</option>
-                                                    <option value="financial-express">Financial Express - All Editions
-                                                    </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -117,30 +111,23 @@
                                             </div>
                                             <div class="offset-sm-1 col-sm-10">
                                                 <select class="form-control" id="theunedition">
-                                                    <option value="" disabled>Select Your ePaper Edition
-                                                    </option>
-                                                    <option value="">All</option>
-                                                    <option value="the-indian-express">The Indian Express - All Editions
-                                                    </option>
-                                                    <option value="deshonnati">Deshonnati - Nagpur & Yevatmal</option>
-                                                    <option value="financial-express">Financial Express - All Editions
-                                                    </option>
+                                                    <option value="" disabled>Select Your ePaper Edition </option>
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="offset-sm-2 col-sm-8">
-                                                    <button type="button" class="btn btn-primary btn-lg btn-block" id="theunsubmit">Unsubscribe</button>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="offset-sm-2 col-sm-8">
+                                                <button type="button" class="btn btn-primary btn-lg btn-block" id="theunsubmit">Unsubscribe</button>
 
-                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="offset-sm-1 col-sm-10">
-                                                    <button type="button" class="btn btn-danger btn-lg btn-block d-none" id="theunmsg" disabled>Subscribe</button>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="offset-sm-1 col-sm-10">
+                                                <button type="button" class="btn btn-danger btn-lg btn-block d-none" id="theunmsg" disabled>Subscribe</button>
 
-                                                </div>
                                             </div>
+                                        </div>
                                     </form>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +246,44 @@
                     $('a[href="#unsub"]').fadeIn('slow')
                 }
             }
+
+            function populateSelect() {
+                $('#theunsubmit').attr('disabled', 'true').html('<span class="spinner-border spinner-border-sm"></span>')
+                $('#thesubmit').attr('disabled', 'true').html('<span class="spinner-border spinner-border-sm"></span>')
+                $.ajax({
+                    method: "GET",
+                    url: "/?request=gettiles",
+                    contentType: "application/json",
+                    async: true,
+                    success: function(response) {
+                        console.log(response)
+                        $('#theedition, #theunedition')
+                            .append($("<option></option>")
+                                .attr("value", '')
+                                .text("All"));
+                        $.each(response, function(i, o) {
+                            $('#theedition, #theunedition')
+                                .append($("<option></option>")
+                                    .attr("value", o.edition_type)
+                                    .text(o.edition_title));
+                        });
+                        $('#thesubmit').removeAttr('disabled').html('Subscribe')
+                        $('#theunsubmit').removeAttr('disabled').html('Unsubscribe')
+                    },
+                    error: function(e) {
+                        console.log(e)
+                        $('#theunmsg').removeClass('d-none btn-success').addClass('btn-danger').html("Unable to Fetch Editions")
+                        $('#themsg').removeClass('d-none btn-success').addClass('btn-danger').html("Unable to Fetch Editions")
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 10000)
+                    }
+                });
+            }
             $(window).on('hashchange', checkURLforextras)
+            $(document).ready(() => {
+                populateSelect()
+            })
         </script>
 </body>
 
