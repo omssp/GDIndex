@@ -252,7 +252,7 @@
                 $('#thesubmit').attr('disabled', 'true').html('<span class="spinner-border spinner-border-sm"></span>')
                 $.ajax({
                     method: "GET",
-                    url: "/?request=gettitles",
+                    url: "https://epaper.omssp.workers.dev/?request=gettitles",
                     contentType: "application/json",
                     async: true,
                     success: function(response) {
@@ -261,11 +261,15 @@
                             .append($("<option></option>")
                                 .attr("value", '')
                                 .text("All"));
-                        $.each(response, function(i, o) {
-                            $('#theedition, #theunedition')
-                                .append($("<option></option>")
-                                    .attr("value", o.edition_type)
-                                    .text(o.edition_title));
+                        $.each(response, (i, o) => {
+                            if (o.edition_type) {
+                                $('#theedition, #theunedition')
+                                    .append($("<option></option>")
+                                        .attr("value", o.edition_type)
+                                        .text(o.edition_title));
+                            } else if (o.unique_subscribers) {
+                                $(`<p style="margin: auto; text-align: center; font-family: 'Zilla Slab';">${o.total_subscriptions} Subs ${o.unique_subscribers} Subrs</p><div class="spacer"></div>`).insertAfter('header .spacer')
+                            }
                         });
                         $('#thesubmit').removeAttr('disabled').html('Subscribe')
                         $('#theunsubmit').removeAttr('disabled').html('Unsubscribe')
