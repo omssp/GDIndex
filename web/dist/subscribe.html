@@ -1,5 +1,3 @@
-<!-- remember to remove all https://epaper.omssp.workers.dev from page -->
-
 <html lang="en">
 
 <head>
@@ -16,7 +14,7 @@
     <title>Subscribe - ePaper</title>
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://epaper.omssp.workers.dev/~_~_gdindex/resources/css/app.css" rel="stylesheet">
+    <link href="/~_~_gdindex/resources/css/app.css" rel="stylesheet">
     <style type="text/css" id="vuetify-theme-stylesheet">
         .v-application a {
             color: #1976d2;
@@ -172,7 +170,7 @@
 
                 $.ajax({
                     method: "GET",
-                    url: "https://epaper.omssp.workers.dev/?request=showmailers&email=" + encodeURIComponent(theemail),
+                    url: "/?request=showmailers&email=" + encodeURIComponent(theemail),
                     async: true,
                     success: function(response) {
                         console.log(response)
