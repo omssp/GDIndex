@@ -139,6 +139,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script>
+            var adminMode = false;
             var recur = window.setInterval(() => {
                 $('.headline').removeClass('hidden-sm-and-down mr-3');
                 $('#app > div > header > div > div:nth-child(5) > a').removeClass('hidden-sm-and-down');
@@ -150,7 +151,7 @@
                     $('.container').attr('style', "font-family: 'Zilla Slab', serif;");
                     checkURLforextras();
                 }
-                $('#thesubmit').unbind('click').on('click', subbscribeIt);
+                $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
                 $('#theunsubmit').unbind('click').on('click', () => {
                     unsubbscribeIt(false)
                 });
@@ -213,7 +214,7 @@
                             $("#theedition").on("change", (e) => {
                                 if ($(e.target).val().length) {
                                     $('#thesubmit').html("Update");
-                                    $('#thesubmit').unbind('click').on('click', subbscribeIt);
+                                    $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
                                 } else {
                                     $('#thesubmit').html("Unsubscribe");
                                     $('#thesubmit').unbind('click').on('click', () => {
@@ -239,6 +240,40 @@
                         }, 4000)
                     }
                 });
+            }
+
+            function whatsappMoney() {
+
+                $('#thesubmit').attr('disabled', 'true').html('<span class="spinner-border spinner-border-sm"></span>')
+
+                let thename = $('#thefname').val() + ' ' + $('#thelname').val()
+                let theemail = $('#theemail').val()
+                if (!thename || !theemail || !$('#theedition option:selected').length) {
+                    $('#thesubmit').removeAttr('disabled').html('Subscribe');
+                    return;
+                }
+                let costPerSub = 50;
+                let finalCost;
+                let theedition = "";
+                $('#theedition option:selected').each((i, o) => {
+                    theedition += `\n${i + 1}: _${o.innerText}_`;
+                    finalCost = (i + 1) * costPerSub;
+                });
+
+                let message = `Hi \u{1f44b}\n\nMy name is *${thename}*\nMy email is _${theemail}_\n\nPlease add my following ePaper subscription(s) for one month\n${theedition}\n\nAs an appreciation to your work\n*I am happily donating you \u{20b9}${finalCost}*\n\nThanks \u{263a}`;
+
+                let url = `https://wa.me/918793687422?text=${encodeURIComponent(message)}`;
+
+                var link = document.createElement('a');
+                link.href = url;
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+
+                $('#themsg').removeClass('d-none btn-danger').addClass('btn-success').html('Your Subscription request is Received<br>You\'ll receive the ePaper daily on your email, <b>once your donation has been verified</b><br><br>Please do Check Your <big><u>SPAM</u></big> Folder too...<br>Please refer to the tutorial given below');
+                $('#thesubmit').addClass('d-none');
             }
 
             function subbscribeIt() {
