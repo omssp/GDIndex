@@ -29,13 +29,29 @@
             color: #1976d2 !important;
             caret-color: #1976d2 !important;
         }
+        
+        .noselect {
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Old versions of Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+        }
     </style>
 </head>
 
 <body data-gr-c-s-loaded="true" style="overflow: hidden;">
     <div data-app="true" class="v-application v-application--is-ltr theme--light" id="app">
         <div class="v-application--wrap">
-            <header class="v-sheet v-sheet--tile theme--dark v-toolbar v-app-bar v-app-bar--fixed primary" data-booted="true" style="height: 64px; margin-top: 0px; transform: translateY(0px); left: 0px; right: 0px;">
+            <header class="v-sheet v-sheet--tile theme--dark v-toolbar v-app-bar v-app-bar--fixed primary noselect" data-booted="true" style="height: 64px; margin-top: 0px; transform: translateY(0px); left: 0px; right: 0px;">
                 <div class="v-toolbar__content" style="height: 64px;">
                     <div class="v-toolbar__title headline pointer mx-4" id="epaper_title"><span class="" style="font-family: monospace">ePaper</span></div>
                     <div class="v-toolbar__items">
@@ -310,6 +326,7 @@
                                         .attr("value", o.edition_type)
                                         .text(o.edition_title))
                             });
+                            $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
                         }
                     },
                     error: function(e) {
