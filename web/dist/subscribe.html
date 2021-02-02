@@ -358,7 +358,7 @@
                     finalCost = (i + 1) * costPerSub;
                 });
 
-                let message = `Hi \u{1f44b}\n\nMy name is *${thename}*\nMy email is _${theemail}_\n\nPlease add my following ePaper subscription(s) for one month\n${theedition}\n\nAs an appreciation to your work\n*I am happily donating you \u{20b9}${finalCost}*\n\nThanks \u{263a}`;
+                let message = `Hi \u{1f44b}\n\nMy name is *${thename}*\nMy email is _${theemail}_\n\nPlease add my following ePaper subscription(s) for one month\n${theedition}\n\nAs an appreciation to your work\n*I am happily donating you \u{20b9}${finalCost - 1}*\n\nThanks \u{263a}`;
 
                 let url = `https://wa.me/918793687422?text=${encodeURIComponent(message)}`;
 
