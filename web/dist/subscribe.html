@@ -386,7 +386,7 @@
                 let costPerSub = 50;
                 let finalCost;
                 let theedition = "";
-                let duraMon = parseInt(theduration.split('#')[1]);
+                let duraMon = Number.isInteger(parseFloat(theduration.split('#')[1])) ? parseInt(theduration.split('#')[1]) : 0;
                 $('#theedition option:selected').each((i, o) => {
                     theedition += `\n${i + 1}: _${o.innerText}_`;
                     finalCost = (i + 1) * costPerSub * ((duraMon) ? duraMon : 0);
