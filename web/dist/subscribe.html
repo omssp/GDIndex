@@ -96,6 +96,11 @@
                                                     <optgroup label="Select Your ePaper Edition"></optgroup>
                                                 </select>
                                             </div>
+                                            <div class="offset-sm-1 col-sm-10 d-none">
+                                                <select class="form-control" id="theduration">
+                                                    <optgroup label="Select the Duration Your Subscription"></optgroup>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="offset-sm-2 col-sm-8 d-none">
@@ -228,6 +233,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script>
             var adminMode = false;
+            var durationList = [1.0, 2.0, 3.0, 6.0, 9.0, 12.0];
             var recur = window.setInterval(() => {
                 $('.headline').removeClass('hidden-sm-and-down mr-3');
                 $('#app > div > header > div > div:nth-child(5) > a').removeClass('hidden-sm-and-down');
@@ -242,13 +248,19 @@
                         window.location = window.origin;
                     })
                     $("#epaper_title").on("press", () => {
-                        adminMode = true;
-                        $('h1').fadeOut(() => {
-                            $('h1').fadeIn();
-                        });
+                        adminMode = !adminMode;
+                        if (adminMode) {
+                            $('h1').fadeOut(() => {
+                                $('h1').fadeIn();
+                            });
+                        } else {
+                            $('header').fadeOut(() => {
+                                $('header').fadeIn();
+                            });
+                        }
                     })
                 }
-                $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
+                $('#thesubmit').unbind('click').on('click', subbscribeIt);
                 $('#theunsubmit').unbind('click').on('click', () => {
                     unsubbscribeIt(false)
                 });
@@ -277,6 +289,7 @@
                         $('#thelname').parent().removeClass('d-none')
                         $('#theedition').parent().removeClass('d-none')
                         $('#thesubmit').parent().removeClass('d-none')
+                        $('#theduration').parent().removeClass('d-none')
                         $('#thenext').parent().removeClass('d-flex').addClass('d-none')
 
                         if (response.counters) {
@@ -305,13 +318,26 @@
                                             .text(o.edition_title))
                                 }
                             });
+                            if (response.info.months_remaninig) {
+                                $('#theduration > optgroup')
+                                    .append($("<option></option>")
+                                        .attr("value", response.info.months_remaninig + "#" + response.info.months_remaninig)
+                                        .attr("selected", true)
+                                        .text(`${response.info.months_remaninig} Months Remaining`))
+                                $.each(durationList, (i, o) => {
+                                    $('#theduration > optgroup')
+                                        .append($("<option></option>")
+                                            .attr("value", (parseFloat(response.info.months_remaninig) + o) + "#" + o)
+                                            .text(`${response.info.months_remaninig} remaining + ${o} Months`))
+                                });
+                            }
                             $('#thesubmit').html("Update");
 
                             //dynamic update sub button on change of form
                             $("#theedition").on("change", (e) => {
                                 if ($(e.target).val().length) {
                                     $('#thesubmit').html("Update");
-                                    $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
+                                    $('#thesubmit').unbind('click').on('click', subbscribeIt);
                                 } else {
                                     $('#thesubmit').html("Unsubscribe");
                                     $('#thesubmit').unbind('click').on('click', () => {
@@ -326,7 +352,12 @@
                                         .attr("value", o.edition_type)
                                         .text(o.edition_title))
                             });
-                            $('#thesubmit').unbind('click').on('click', (adminMode ? subbscribeIt : whatsappMoney));
+                            $.each(durationList, (i, o) => {
+                                $('#theduration > optgroup')
+                                    .append($("<option></option>")
+                                        .attr("value", "#" + o)
+                                        .text(`${o} Months`))
+                            });
                         }
                     },
                     error: function(e) {
@@ -350,15 +381,21 @@
                     $('#thesubmit').removeAttr('disabled').html('Subscribe');
                     return;
                 }
+                let theduration = $('#theduration').val();
+                let remMon = theduration.split('#')[0];
                 let costPerSub = 50;
                 let finalCost;
                 let theedition = "";
+                let duraMon = parseInt(theduration.split('#')[1]);
                 $('#theedition option:selected').each((i, o) => {
                     theedition += `\n${i + 1}: _${o.innerText}_`;
-                    finalCost = (i + 1) * costPerSub;
+                    finalCost = (i + 1) * costPerSub * ((duraMon) ? duraMon : 0);
                 });
 
-                let message = `Hi \u{1f44b}\n\nMy name is *${thename}*\nMy email is _${theemail}_\n\nPlease add my following ePaper subscription(s) for one month\n${theedition}\n\nAs an appreciation to your work\n*I am happily donating you \u{20b9}${finalCost - 1}*\n\nThanks \u{263a}`;
+                let message = `Hi \u{1f44b}\n\nMy name is *${thename}*\nMy email is _${theemail}_\n\nPlease add my following ePaper subscription(s) for ${duraMon} month(s)\n${theedition}\n\nAs an appreciation to your work\n*I am happily donating you \u{20b9}${finalCost - 1}*\n\nThanks \u{263a}`;
+                if (remMon) {
+                    message = `Hi there \u{1f44b}\n\nThis is *${thename}* once again\nHope you remember that my email is _${theemail}_\n\nMy current ePaper subscription has ${parseFloat(remMon) - duraMon} month(s) remaining\n\nPlease *update* my ePaper subscription to\n${theedition}\n\n${duraMon ? "Also *extend my subscription for " + duraMon + " more month(s)*\n\n" : ""}As an appreciation to your work\n*I am happily donating you \u{20b9}${(finalCost) ? finalCost - 1 : 9}*\n\nThanks once again \u{263a}`;
+                }
 
                 let url = `https://wa.me/918793687422?text=${encodeURIComponent(message)}`;
 
@@ -375,6 +412,10 @@
             }
 
             function subbscribeIt() {
+                if (!adminMode) {
+                    whatsappMoney();
+                    return;
+                }
 
                 $('#thesubmit').attr('disabled', 'true').html('<span class="spinner-border spinner-border-sm"></span>')
 
@@ -387,7 +428,7 @@
                 let theedition = $('#theedition').val().join(',')
                 $.ajax({
                     method: "GET",
-                    url: "/?request=addnewemail&email=" + encodeURIComponent(theemail) + "&name=" + encodeURIComponent(thename) + "&type=" + encodeURIComponent(theedition ? theedition : ''),
+                    url: "/?request=addnewemail&email=" + encodeURIComponent(theemail) + "&name=" + encodeURIComponent(thename) + "&type=" + encodeURIComponent(theedition ? theedition : '') + "&duraMon=" + encodeURIComponent($('#theduration').val().split('#')[0] ? $('#theduration').val().split('#')[0] : $('#theduration').val().split('#')[1]),
                     async: true,
                     success: function(response) {
                         console.log(response)
